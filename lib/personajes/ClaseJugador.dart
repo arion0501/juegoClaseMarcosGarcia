@@ -6,10 +6,8 @@ import 'package:juego_clase_marcosgarcia/juegos/ClaseJuego.dart';
 
 class ClaseJugador extends SpriteAnimationComponent
     with HasGameRef<ClaseJuego> {
-
-  ClaseJugador({
-    required super.position, required super.size
-  }) : super( anchor: Anchor.center);
+  ClaseJugador({required super.position, required super.size})
+      : super(anchor: Anchor.center);
 
   @override
   void onLoad() {
@@ -51,24 +49,23 @@ class ClaseJugadorBody extends BodyComponent
     final shape = CircleShape();
     shape.radius = tamano.x / 2;
 
-    FixtureDef fixtureDef =
-        FixtureDef(shape, restitution: 0.5, userData: this);
+    FixtureDef fixtureDef = FixtureDef(shape, restitution: 0.5, userData: this);
     cuerpo.createFixture(fixtureDef);
 
     return cuerpo;
   }
 
-@override
-Future<void> onLoad() {
-  emberPlayer = ClaseJugador(position: Vector2(0,0), size: tamano);
-  add(emberPlayer);
-  return super.onLoad();
-}
+  @override
+  Future<void> onLoad() {
+    emberPlayer = ClaseJugador(position: Vector2(0, 0), size: tamano);
+    add(emberPlayer);
+    return super.onLoad();
+  }
 
-@override
-void onTapDown(_) {
-  body.applyLinearImpulse(Vector2.random() * 5000);
-}
+  @override
+  void onTapDown(_) {
+    body.applyLinearImpulse(Vector2.random() * 5000);
+  }
 
   @override
   void update(double dt) {
@@ -79,7 +76,6 @@ void onTapDown(_) {
     body.applyLinearImpulse(velocidad * dt * 1000);
 
     if (horizontalDirection < 0 && emberPlayer.scale.x > 0) {
-
       emberPlayer.flipHorizontallyAroundCenter();
     } else if (horizontalDirection > 0 && emberPlayer.scale.x < 0) {
       emberPlayer.flipHorizontallyAroundCenter();
@@ -90,49 +86,37 @@ void onTapDown(_) {
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    horizontalDirection = 0;
     verticalDirection = 0;
 
-    // ARRIBA DERECHA
-    if (keysPressed.contains(LogicalKeyboardKey.arrowRight) &&
-        keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      horizontalDirection = 1;
-      verticalDirection = -1;
-    }
-    // ARRIBA IZQUIERDA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft) &&
-        keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      horizontalDirection = -1;
-      verticalDirection = -1;
-    }
-    // ABAJO IZQUIERDA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft) &&
-        keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      horizontalDirection = -1;
-      verticalDirection = 1;
-    }
-    // ABAJO DERECHA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowRight) &&
-        keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      horizontalDirection = 1;
-      verticalDirection = 1;
-    }
-    // DERECHA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      horizontalDirection = 1;
-    }
-    // IZQUIERDA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      horizontalDirection = -1;
-    }
-    // ARRIBA
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      verticalDirection = -1;
-    }
-    // ABAJO
-    else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      verticalDirection = 1;
-    } else {
-      horizontalDirection = 0;
+    final bool isKeyDown = event is RawKeyDownEvent;
+
+    if (isKeyDown) {
+      if (keysPressed.contains(LogicalKeyboardKey.keyA) &&
+          keysPressed.contains(LogicalKeyboardKey.keyS)) {
+        horizontalDirection = -4;
+        verticalDirection = 4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyD) &&
+          keysPressed.contains(LogicalKeyboardKey.keyS)) {
+        horizontalDirection = 4;
+        verticalDirection = 4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyD) &&
+          keysPressed.contains(LogicalKeyboardKey.keyW)) {
+        horizontalDirection = 4;
+        verticalDirection = -4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyA) &&
+          keysPressed.contains(LogicalKeyboardKey.keyW)) {
+        horizontalDirection = -4;
+        verticalDirection = -4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyD)) {
+        horizontalDirection = 4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyA)) {
+        horizontalDirection = -4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
+        verticalDirection = 4;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
+        verticalDirection = -4;
+      }
     }
 
     return super.onKeyEvent(event, keysPressed);
