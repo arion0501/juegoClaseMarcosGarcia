@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
 import '../juegos/ClaseJuego.dart';
 
-class WaterPlayer extends SpriteAnimationComponent
+class ClaseEnemigo extends SpriteAnimationComponent
     with HasGameRef<ClaseJuego> {
-  WaterPlayer({
+  ClaseEnemigo({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 

@@ -81,9 +81,6 @@
   <object id="42" x="1557.06" y="435.203">
    <point/>
   </object>
-  <object id="43" x="664.894" y="725.338">
-   <point/>
-  </object>
  </objectgroup>
  <objectgroup id="5" name="tierra">
   <object id="50" x="2.58331" y="768.535" width="764.66" height="507.621"/>

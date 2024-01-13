@@ -82,7 +82,6 @@ class ClaseJugadorBody extends BodyComponent
     } else if (horizontalDirection > 0 && emberPlayer.scale.x < 0) {
       emberPlayer.flipHorizontallyAroundCenter();
     }
-
     super.update(dt);
   }
 
