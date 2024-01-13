@@ -31,6 +31,7 @@ class ClaseJugadorBody extends BodyComponent
   int verticalDirection = 0;
   late ClaseJugador emberPlayer;
   Vector2 initialPosition;
+  bool blEspacioLiberado = true;
 
   ClaseJugadorBody(
       {required this.initialPosition, required, required this.tamano})
@@ -90,6 +91,7 @@ class ClaseJugadorBody extends BodyComponent
     verticalDirection = 0;
 
     final bool isKeyDown = event is RawKeyDownEvent;
+    final bool isKeyUp = event is RawKeyUpEvent;
 
     if (isKeyDown) {
       if (keysPressed.contains(LogicalKeyboardKey.keyA) &&
@@ -117,8 +119,16 @@ class ClaseJugadorBody extends BodyComponent
       } else if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
         verticalDirection = -4;
       }
+      if (keysPressed.contains(LogicalKeyboardKey.numpad5)) {
+        if (blEspacioLiberado) {
+          blEspacioLiberado = false;
+          body.gravityOverride = Vector2(0, -40);
+        }
+      }
+    } else if (isKeyUp) {
+      blEspacioLiberado = true;
+      body.gravityOverride = Vector2(0, 40);
     }
-
-    return super.onKeyEvent(event, keysPressed);
+    return true;
   }
 }

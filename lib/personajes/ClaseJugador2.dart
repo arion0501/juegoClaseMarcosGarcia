@@ -7,7 +7,7 @@ import '../elementos/Gota.dart';
 import '../juegos/ClaseJuego.dart';
 
 class ClaseJugador2 extends SpriteAnimationComponent
-    with HasGameRef<ClaseJuego>,KeyboardHandler,CollisionCallbacks {
+    with HasGameRef<ClaseJuego>, KeyboardHandler, CollisionCallbacks {
 
   int horizontalDirection = 0;
   int verticalDirection = 0;
@@ -28,9 +28,7 @@ class ClaseJugador2 extends SpriteAnimationComponent
 
   double posicionInicialY = 0.0;
 
-  ClaseJugador2({
-    required super.position, super.size
-  }){
+  ClaseJugador2({required super.position, super.size}) {
     posicionInicialY = position.y;
   }
 
@@ -51,7 +49,7 @@ class ClaseJugador2 extends SpriteAnimationComponent
 
     hitbox = RectangleHitbox()
       ..paint = defaultPaint
-      ..isSolid=true
+      ..isSolid = true
       ..renderShape = true;
     add(hitbox);
 
@@ -60,10 +58,9 @@ class ClaseJugador2 extends SpriteAnimationComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if(other is Gota){
+    if (other is Gota) {
       this.removeFromParent();
-    }
-    else if(other is Estrella){
+    } else if (other is Estrella) {
       other.removeFromParent();
     }
     super.onCollision(intersectionPoints, other);
@@ -71,9 +68,9 @@ class ClaseJugador2 extends SpriteAnimationComponent
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints,
-      PositionComponent other,
-      ) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     hitbox.paint.color = _collisionStartColor;
   }
@@ -93,7 +90,6 @@ class ClaseJugador2 extends SpriteAnimationComponent
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-
     horizontalDirection = 0;
     verticalDirection = 0;
 
@@ -101,41 +97,27 @@ class ClaseJugador2 extends SpriteAnimationComponent
         keysPressed.contains(LogicalKeyboardKey.numpad2)) {
       horizontalDirection = -1;
       verticalDirection = 1;
-    }
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad6) &&
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad6) &&
         keysPressed.contains(LogicalKeyboardKey.numpad2)) {
       horizontalDirection = 1;
       verticalDirection = 1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad6) &&
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad6) &&
         keysPressed.contains(LogicalKeyboardKey.numpad8)) {
       horizontalDirection = 1;
       verticalDirection = -1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad4) &&
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad4) &&
         keysPressed.contains(LogicalKeyboardKey.numpad8)) {
       horizontalDirection = -1;
       verticalDirection = -1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad6)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad6)) {
       horizontalDirection = 1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad4)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad4)) {
       horizontalDirection = -1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad2)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad2)) {
       verticalDirection = 1;
-    }
-
-    else if (keysPressed.contains(LogicalKeyboardKey.numpad8)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.numpad8)) {
       verticalDirection = -1;
     }
-
 
     return true;
   }
@@ -147,6 +129,5 @@ class ClaseJugador2 extends SpriteAnimationComponent
     position += velocidad * dt;
 
     screenWidth = gameRef.size.x;
-
   }
 }

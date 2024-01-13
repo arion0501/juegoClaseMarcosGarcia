@@ -87,7 +87,7 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
     world.add(_ember);
 
     _jugador2 = ClaseJugador2(
-        position: Vector2(200, canvasSize.y - 100),
+        position: Vector2(200, canvasSize.y - 280),
         size: Vector2(64 * wScale, 64 * hScale));
 
     world.add(_jugador2);
