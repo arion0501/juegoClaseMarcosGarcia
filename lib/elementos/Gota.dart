@@ -1,22 +1,36 @@
+import 'dart:ui';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:juego_clase_marcosgarcia/juegos/ClaseJuego.dart';
+import 'package:flutter/material.dart';
+import '../juegos/ClaseJuego.dart';
 
 class Gota extends SpriteAnimationComponent with HasGameRef<ClaseJuego> {
+  Gota({required super.position, super.size});
 
-  Gota({
-    required super.position, required super.size
-  }) :  super(anchor: Anchor.center);
+  late ShapeHitbox hitbox;
+  final _defaultColor = Colors.red;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
         amount: 2,
         amountPerRow: 2,
-        textureSize: Vector2(16, 16),
+        textureSize: Vector2.all(16),
         stepTime: 0.12,
       ),
     );
+
+    final defaultPaint = Paint()
+      ..color = _defaultColor
+      ..style = PaintingStyle.stroke;
+
+    hitbox = RectangleHitbox()
+      ..paint = defaultPaint
+      ..isSolid = true;
+    add(hitbox);
+
+    super.onLoad();
   }
 }
