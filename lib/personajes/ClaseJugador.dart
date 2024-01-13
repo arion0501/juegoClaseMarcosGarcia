@@ -32,6 +32,7 @@ class ClaseJugadorBody extends BodyComponent
   late ClaseJugador emberPlayer;
   Vector2 initialPosition;
   bool blEspacioLiberado = true;
+  int iVidas = 3;
 
   ClaseJugadorBody(
       {required this.initialPosition, required, required this.tamano})
