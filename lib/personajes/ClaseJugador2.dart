@@ -1,97 +1,98 @@
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../elementos/Estrella.dart';
-import '../elementos/Gota.dart';
 import '../juegos/ClaseJuego.dart';
 
 class ClaseJugador2 extends SpriteAnimationComponent
-    with HasGameRef<ClaseJuego>, KeyboardHandler, CollisionCallbacks {
-
-  int horizontalDirection = 0;
-  int verticalDirection = 0;
-  final Vector2 velocidad = Vector2.zero();
-  double aceleracion = 200;
-  bool derecha = true;
-
-  double screenWidth = 0;
-  bool saltoEnPared = false;
-  bool enElAire = false;
-  bool enLaPared = false;
-  final double gravedad = 1200.0;
-  final double alturaSalto = -500.0;
-
-  final _collisionStartColor = Colors.black87;
-  final _defaultColor = Colors.red;
-  late ShapeHitbox hitbox;
-
-  double posicionInicialY = 0.0;
-
-  ClaseJugador2({required super.position, super.size}) {
-    posicionInicialY = position.y;
-  }
+    with HasGameRef<ClaseJuego> {
+  ClaseJugador2({required super.position, required super.size})
+      : super(anchor: Anchor.center);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('ember.png'),
+      game.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
-        amount: 4,
+        amount: 2,
+        amountPerRow: 2,
         textureSize: Vector2.all(16),
         stepTime: 0.12,
       ),
     );
+  }
+}
 
-    final defaultPaint = Paint()
-      ..color = _defaultColor
-      ..style = PaintingStyle.stroke;
+class ClaseJugadorBody2 extends BodyComponent
+    with KeyboardHandler, ContactCallbacks {
+  final Vector2 velocidad = Vector2.zero();
+  final double aceleracion = 200;
+  late Vector2 tamano;
+  int horizontalDirection = 0;
+  int verticalDirection = 0;
+  late ClaseJugador2 emberPlayer;
+  Vector2 initialPosition;
+  bool blEspacioLiberado = true;
+  int iVidas = 3;
 
-    hitbox = RectangleHitbox()
-      ..paint = defaultPaint
-      ..isSolid = true
-      ..renderShape = true;
-    add(hitbox);
+  ClaseJugadorBody2(
+      {required this.initialPosition, required, required this.tamano})
+      : super();
 
+  @override
+  Body createBody() {
+    BodyDef definicionCuerpo = BodyDef(
+        position: initialPosition,
+        type: BodyType.dynamic,
+        angularDamping: 0.8,
+        userData: this);
+
+    Body cuerpo = world.createBody(definicionCuerpo);
+
+    final shape = CircleShape();
+    shape.radius = tamano.x / 2;
+
+    FixtureDef fixtureDef = FixtureDef(shape, restitution: 0.5, userData: this);
+    cuerpo.createFixture(fixtureDef);
+
+    return cuerpo;
+  }
+
+  @override
+  Future<void> onLoad() {
+    emberPlayer = ClaseJugador2(position: Vector2(0, 0), size: tamano);
+    add(emberPlayer);
     return super.onLoad();
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Gota) {
-      this.removeFromParent();
-    } else if (other is Estrella) {
-      other.removeFromParent();
-    }
-    super.onCollision(intersectionPoints, other);
+  void onTapDown(_) {
+    body.applyLinearImpulse(Vector2.random() * 5000);
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
-    hitbox.paint.color = _collisionStartColor;
-  }
+  void update(double dt) {
+    velocidad.x = horizontalDirection * aceleracion;
+    velocidad.y = verticalDirection * aceleracion;
 
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if (!isColliding) {
-      hitbox.paint.color = _defaultColor;
+    initialPosition += velocidad * dt;
+    body.applyLinearImpulse(velocidad * dt * 1000);
+
+    if (horizontalDirection < 0 && emberPlayer.scale.x > 0) {
+      emberPlayer.flipHorizontallyAroundCenter();
+    } else if (horizontalDirection > 0 && emberPlayer.scale.x < 0) {
+      emberPlayer.flipHorizontallyAroundCenter();
     }
-  }
-
-  void saltar() {
-    velocidad.y = alturaSalto;
-    enElAire = true;
+    super.update(dt);
   }
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalDirection = 0;
     verticalDirection = 0;
+
+    final bool isKeyDown = event is RawKeyDownEvent;
+    final bool isKeyUp = event is RawKeyUpEvent;
 
     if (keysPressed.contains(LogicalKeyboardKey.numpad4) &&
         keysPressed.contains(LogicalKeyboardKey.numpad2)) {
@@ -118,16 +119,15 @@ class ClaseJugador2 extends SpriteAnimationComponent
     } else if (keysPressed.contains(LogicalKeyboardKey.numpad8)) {
       verticalDirection = -1;
     }
-
+    if (keysPressed.contains(LogicalKeyboardKey.numpad5)) {
+      if (blEspacioLiberado) {
+        blEspacioLiberado = false;
+        body.gravityOverride = Vector2(0, -40);
+      }
+    } else if (isKeyUp) {
+      blEspacioLiberado = true;
+      body.gravityOverride = Vector2(0, 40);
+    }
     return true;
-  }
-
-  @override
-  void update(double dt) {
-    velocidad.x = horizontalDirection * aceleracion;
-    velocidad.y = verticalDirection * aceleracion;
-    position += velocidad * dt;
-
-    screenWidth = gameRef.size.x;
   }
 }

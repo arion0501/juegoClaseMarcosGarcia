@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:juego_clase_marcosgarcia/CuerposElementos/CuerpoEnemigo.dart';
 import 'package:juego_clase_marcosgarcia/CuerposElementos/CuerpoTierra.dart';
 import '../CuerposElementos/CuerpoGota.dart';
 import '../elementos/Estrella.dart';
@@ -23,7 +22,7 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
   late final CameraComponent cameraComponent;
   late TiledComponent mapComponent;
   late ClaseJugadorBody _ember;
-  late ClaseJugador2 _jugador2;
+  late ClaseJugadorBody2 _jugador2;
   //late CuerpoEnemigo _enemy;
 
   @override
@@ -96,10 +95,11 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
     _ember.onBeginContact = InicioContactosDelJuego;
     world.add(_ember);
 
-    /*_jugador2 = ClaseJugador2(
-        position: Vector2(200, canvasSize.y - 280),
-        size: Vector2(64 * wScale, 64 * hScale));
-    world.add(_jugador2);*/
+    _jugador2 = ClaseJugadorBody2(
+        initialPosition: Vector2(210, canvasSize.y - canvasSize.y / 2),
+        tamano: Vector2(64 * wScale, 64 * hScale));
+    _ember.onBeginContact = InicioContactosDelJuego;
+    world.add(_jugador2);
 
     /*_enemy = CuerpoEnemigo(
       posXY: Vector2(200, canvasSize.y - 280),
