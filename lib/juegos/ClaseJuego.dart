@@ -5,6 +5,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:juego_clase_marcosgarcia/CuerposElementos/CuerpoTierra.dart';
 import '../CuerposElementos/CuerpoGota.dart';
+import '../elementos/CorazonesVida.dart';
 import '../elementos/Estrella.dart';
 import '../personajes/ClaseJugador.dart';
 import '../personajes/ClaseJugador2.dart';
@@ -23,6 +24,7 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
   late TiledComponent mapComponent;
   late ClaseJugadorBody _ember;
   late ClaseJugadorBody2 _jugador2;
+  late CorazonesVida corazonVida;
   //late CuerpoEnemigo _enemy;
 
   @override
@@ -94,6 +96,9 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
         tamano: Vector2(64 * wScale, 64 * hScale));
     _ember.onBeginContact = InicioContactosDelJuego;
     world.add(_ember);
+
+    corazonVida = CorazonesVida(_ember, wScale, hScale);
+    world.add(corazonVida);
 
     _jugador2 = ClaseJugadorBody2(
         initialPosition: Vector2(210, canvasSize.y - canvasSize.y / 2),
