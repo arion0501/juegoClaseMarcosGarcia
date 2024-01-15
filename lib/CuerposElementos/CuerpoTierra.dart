@@ -12,7 +12,7 @@ class CuerpoTierra extends BodyComponent with ContactCallbacks
 
   @override
   Future<void> onLoad() {
-    renderBody = true;
+    renderBody = false;
     return super.onLoad();
   }
 

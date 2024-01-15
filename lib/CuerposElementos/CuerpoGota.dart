@@ -31,6 +31,7 @@ class CuerpoGota extends BodyComponent<ClaseJuego> with ContactCallbacks {
 
   @override
   Future<void> onLoad() async {
+    renderBody = false;
     await super.onLoad();
 
     Gota gotaPlayer = Gota(position: Vector2.all(-21), size: tamWH);

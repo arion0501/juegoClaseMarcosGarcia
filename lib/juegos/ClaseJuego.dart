@@ -53,7 +53,7 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
 
     mapComponent = await TiledComponent.load(
         'mapa1.tmx', Vector2(32 * wScale, 32 * hScale));
-    world.add(mapComponent);
+    add(mapComponent);
 
     void InicioContactosDelJuego(Object objeto, Contact contact) {
       if (objeto is CuerpoGota) {
@@ -71,7 +71,7 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
       Estrella spriteStar = Estrella(
           position: Vector2(estrella.x * wScale, estrella.y * hScale),
           size: Vector2(32 * wScale, 32 * hScale));
-      world.add(spriteStar);
+      add(spriteStar);
     }
 
     ObjectGroup? gotas = mapComponent.tileMap.getLayer<ObjectGroup>("gotas");
@@ -95,16 +95,16 @@ class ClaseJuego extends Forge2DGame with HasKeyboardHandlerComponents {
         initialPosition: Vector2(200, canvasSize.y - canvasSize.y / 2),
         tamano: Vector2(64 * wScale, 64 * hScale));
     _ember.onBeginContact = InicioContactosDelJuego;
-    world.add(_ember);
+    add(_ember);
 
     corazonVida = CorazonesVida(_ember, wScale, hScale);
-    world.add(corazonVida);
+    add(corazonVida);
 
     _jugador2 = ClaseJugadorBody2(
         initialPosition: Vector2(210, canvasSize.y - canvasSize.y / 2),
         tamano: Vector2(64 * wScale, 64 * hScale));
     _ember.onBeginContact = InicioContactosDelJuego;
-    world.add(_jugador2);
+    add(_jugador2);
 
     /*_enemy = CuerpoEnemigo(
       posXY: Vector2(200, canvasSize.y - 280),

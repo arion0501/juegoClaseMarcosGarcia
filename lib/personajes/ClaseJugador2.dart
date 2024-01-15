@@ -60,6 +60,7 @@ class ClaseJugadorBody2 extends BodyComponent
 
   @override
   Future<void> onLoad() {
+    renderBody = false;
     emberPlayer = ClaseJugador2(position: Vector2(0, 0), size: tamano);
     add(emberPlayer);
     return super.onLoad();
